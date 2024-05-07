@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preowned Cars</title>
+    <style>
+        /* Add CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: calc(100% - 80px); /* Adjusted width for the search input */
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 80px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #carData {
+            margin-top: 20px;
+        }
+        #carData p {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #searchOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #ffc107;
+            color: #333;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Preowned Cars</h1>
+        <input type="text" id="searchInput" placeholder="Enter Car Name...">
+        <button onclick="searchCars()">Search</button>
+        <div id="carData"></div>
+        <div id="searchOutput"></div>
+    </div>
+
+    <script>
+        // Function to fetch data from data.json file
+        async function fetchData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Function to search cars
+        async function searchCars() {
+            let input = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!input) return;
+
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                const filteredData = data.filter(car => car.CarName.toLowerCase().includes(input));
+                console.log(filteredData);
+                displayCars(filteredData);
+                displaySearchOutput(filteredData.length === 0 ? 'No matching car found.' : '');
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Function to display cars
+        function displayCars(data) {
+            let carDataHTML = '';
+            data.forEach(car => {
+                carDataHTML += `<p>Car Name: ${car.CarName}, Price: ${car.price}, Engine Size: ${car.enginesize}, Horsepower: ${car.horsepower}</p>`;
+            });
+            document.getElementById('carData').innerHTML = carDataHTML;
+        }
+
+        // Function to display search output
+        function displaySearchOutput(message) {
+            document.getElementById('searchOutput').innerText = message;
+            document.getElementById('searchOutput').style.display = message ? 'block' : 'none'; // Display the search output box if message is not empty
+        }
+
+        // Initial data fetch on page load
+        fetchData();
+    </script>
+</body>
+</html>
