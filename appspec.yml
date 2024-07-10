@@ -1,0 +1,26 @@
+version: 0.0
+resources:
+  files:
+    - source: ./index.html
+      destination: /var/www/html/
+      permissions: 644
+    - source: ./style.css
+      destination: /var/www/html/css/
+      permissions: 644
+    - source: ./searchVehicle.js
+      destination: /var/www/html/js/
+      permissions: 644
+    - source: ./data.json
+      destination: /var/www/html/data/
+      permissions: 644
+  scripts:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+    - location: scripts/restart_service.sh
+      timeout: 300
+      runas: root
+    - location: scripts/start_service.sh
+      timeout: 300
+      runas: root
+

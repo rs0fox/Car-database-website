@@ -1,0 +1,20 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo "Preparing build environment"
+      - bash scripts/install_dependencies.sh
+  install:
+    commands:
+      - apt-get update
+      - apt-get install -y nginx
+  build:
+    commands:
+      - mkdir -p /var/www/html/css
+      - mkdir -p /var/www/html/js
+      - mkdir -p /var/www/html/data
+  post_build:
+    commands:
+      - echo "Build completed"
+      - bash scripts/restart_service.sh
+      - bash scripts/start_service.sh
